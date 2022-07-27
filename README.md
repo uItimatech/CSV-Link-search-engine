@@ -2,8 +2,8 @@
 A simple search engine to go through thousands of links, such as uptobox links, of a csv sheet in no time with multiple useful features.
 
 **Requirements:**
--Python 3
+\n-Python 3
 
 **How to use**
--Place your .csv files inside the 'link sheets' folder
--Run LSE.py to use the script (instructions inside)
+\n-Place your .csv files inside the 'link sheets' folder
+\n-Run LSE.py to use the script (instructions inside)
