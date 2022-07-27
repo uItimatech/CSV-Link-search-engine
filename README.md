@@ -5,5 +5,4 @@ A simple search engine to go through thousands of links, such as uptobox links, 
 Python 3
 
 **How to use**
-Place your .csv files inside the 'link sheets' folder
-Run LSE.py to use the script (instructions inside)
+Place your .csv files inside the 'link sheets' folder and run LSE.py to use the script (instructions inside)
