@@ -144,6 +144,17 @@ def searchKeys(selectedFile,_keywords):
             foundSizes.append(_titleSizes[_currentId-1])
             foundLinks.append(_titleLinks[_currentId-1])
 
+    # Make list of duplicate links index
+    _dupIndexList = [i for i, x in enumerate(foundLinks) if i != foundLinks.index(x)]
+
+    # Remove from the duplicate elements for each list
+    # We remove them in reverse so that the list is not modified after remove
+    for i in sorted(_dupIndexList, reverse=True):
+        del foundIds[i]
+        del foundTitles[i]
+        del foundSizes[i]
+        del foundLinks[i]
+
     return foundIds, foundTitles, foundSizes, foundLinks
  
 
