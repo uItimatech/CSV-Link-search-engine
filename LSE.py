@@ -80,7 +80,14 @@ except ImportError:
 # --------------- Functions ----------------
 
 # Clears the console
-clearConsole = lambda: os.system('cls') # Might need to use 'clear' if on Linux
+# Might need to be changed for other OS
+def clearConsole():
+  # Windows
+  if 'nt' in os.name:
+    os.system('cls')
+  # Linux and probably Mac
+  else:
+    os.system('clear')
 
 # Shows the search progress bar
 def progressBar(_currentItem,_maxItems):
@@ -107,12 +114,18 @@ def convertSize(bytesSize):
    return "%s %s" % (s, size_name[i])
 
 # Find titles from specific keyword(s)
-def searchKeys(_filePath,_keywords):
+def searchKeys(selectedFile,_keywords):
 
-    _file = read_csv(_filePath)
-    _titleList = _file['title'].tolist()
-    _titleSizes = _file['size'].tolist()
-    _titleLinks = _file['link'].tolist()
+    _titleList  = []
+    _titleSizes = []
+    _titleLinks = []
+
+    for _filePath in selectedFile:
+        _file       = read_csv('link sheets/' + _filePath)
+        _titleList  += _file['title'].tolist()
+        _titleSizes += _file['size'].tolist()
+        _titleLinks += _file['link'].tolist()
+
     _currentId = 0
     foundIds, foundTitles, foundSizes, foundLinks = [], [], [], []
 
@@ -130,6 +143,17 @@ def searchKeys(_filePath,_keywords):
             foundTitles.append(_currentTitle)
             foundSizes.append(_titleSizes[_currentId-1])
             foundLinks.append(_titleLinks[_currentId-1])
+
+    # Make list of duplicate links index
+    _dupIndexList = [i for i, x in enumerate(foundLinks) if i != foundLinks.index(x)]
+
+    # Remove from the duplicate elements for each list
+    # We remove them in reverse so that the list is not modified after remove
+    for i in sorted(_dupIndexList, reverse=True):
+        del foundIds[i]
+        del foundTitles[i]
+        del foundSizes[i]
+        del foundLinks[i]
 
     return foundIds, foundTitles, foundSizes, foundLinks
  
@@ -174,14 +198,20 @@ else:
 # Ask the user for the desired file
 while True:
 
-    selectedID = input("\nType the desired file Id: ")
+    selectedID = input("\nType the desired file Id (all will search through all the csv): ")
+
+    # Check if selectedID is all
+    if selectedID == 'all':
+      selectedFile = linkSheetFiles
+      break
 
     # Check for valid file id
     if not selectedID in [str(_id) for _id in range(1,len(linkSheetFiles)+1)]:
         print(colored("Please choose a valid file id.",'red'))
 
     else:
-        selectedFile = linkSheetFiles[int(selectedID)-1]
+        selectedFile = []
+        selectedFile.append(linkSheetFiles[int(selectedID)-1])
         break
 
 
@@ -222,7 +252,7 @@ while True:
 
 
     # Gets a list of ids corresponding to each title matching desired keywords
-    foundIds, foundTitles, foundSizes, foundLinks = searchKeys('link sheets/' + selectedFile, keywords)
+    foundIds, foundTitles, foundSizes, foundLinks = searchKeys(selectedFile, keywords)
 
     # Prints the found results and highlights keywords in titles
     clearConsole()
