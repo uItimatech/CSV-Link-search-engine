@@ -6,7 +6,6 @@ A simple and lightweight search engine for
 Simply put your sheet inside the 'link sheets'
 folder and run this script.
 
-Created by ultimatech
 First update: 24/07/2022 18:27
 Last update: 27/07/2022 18:33
 Version: Beta 1.1
